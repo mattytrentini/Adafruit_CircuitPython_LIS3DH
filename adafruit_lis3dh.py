@@ -32,7 +32,7 @@ Implementation Notes
 
 import time
 import math
-import digitalio
+#import digitalio
 try:
     from collections import namedtuple
 except ImportError:
@@ -114,9 +114,9 @@ class LIS3DH:
         # Initialise interrupt pins
         self._int1 = int1
         self._int2 = int2
-        if self._int1:
-            self._int1.direction = digitalio.Direction.INPUT
-            self._int1.pull = digitalio.Pull.UP
+        #if self._int1:
+        #    self._int1.direction = digitalio.Direction.INPUT
+        #    self._int1.pull = digitalio.Pull.UP
 
     @property
     def data_rate(self):
@@ -316,6 +316,19 @@ class LIS3DH:
         # Subclasses MUST implement this!
         raise NotImplementedError
 
+class LIS3DH_I2C_MP(LIS3DH):
+    """Driver for the LIS3DH accelerometer connected over I2C."""
+
+    def __init__(self, i2c, *, address=0x18, int1=None, int2=None):
+        self._i2c = i2c
+        self._address = address
+        super().__init__(int1=int1, int2=int2)
+
+    def _read_register(self, register, length):
+        return self._i2c.readfrom_mem(self._address, register, length)
+
+    def _write_register_byte(self, register, value):
+        self._i2c.writeto_mem(self._address, register, bytes(value))
 
 class LIS3DH_I2C(LIS3DH):
     """Driver for the LIS3DH accelerometer connected over I2C."""
