@@ -120,10 +120,10 @@ class LIS3DH:
 
     @property
     def data_rate(self):
-        """The data rate of the accelerometer.  Can be DATA_RATE_400_HZ, DATA_RATE_200_HZ,
-           DATA_RATE_100_HZ, DATA_RATE_50_HZ, DATA_RATE_25_HZ, DATA_RATE_10_HZ,
-           DATA_RATE_1_HZ, DATA_RATE_POWERDOWN, DATA_RATE_LOWPOWER_1K6HZ, or
-           DATA_RATE_LOWPOWER_5KHZ."""
+        """The data rate of the accelerometer.  Can be DATARATE_400_HZ, DATARATE_200_HZ,
+           DATARATE_100_HZ, DATARATE_50_HZ, DATARATE_25_HZ, DATARATE_10_HZ,
+           DATARATE_1_HZ, DATARATE_POWERDOWN, DATARATE_LOWPOWER_1K6HZ, or
+           DATARATE_LOWPOWER_5KHZ."""
         ctl1 = self._read_register_byte(_REG_CTRL1)
         return (ctl1 >> 4) & 0x0F
 
@@ -328,7 +328,7 @@ class LIS3DH_I2C_MP(LIS3DH):
         return self._i2c.readfrom_mem(self._address, register, length)
 
     def _write_register_byte(self, register, value):
-        self._i2c.writeto_mem(self._address, register, bytes(value))
+        self._i2c.writeto_mem(self._address, register, bytes([value]))
 
 class LIS3DH_I2C(LIS3DH):
     """Driver for the LIS3DH accelerometer connected over I2C."""
